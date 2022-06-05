@@ -8,7 +8,6 @@ import homework.course.work.Exeption.EmployeeStorageIsFullException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         for (int i = 0; i < employees.size(); i++) {
             if (Objects.equals(employees.get(i), employee)) {
                 employees.remove(i);
+                break;
             }
         }
 

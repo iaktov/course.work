@@ -6,13 +6,13 @@ import homework.course.work.model.Employee;
 import java.util.List;
 
 public interface EmployeeService {
-    public Employee addAnEmployee(String firstName, String lastName);
+    Employee addAnEmployee(String firstName, String lastName);
 
-    public Employee deleteAnEmployee(String firstName, String lastName);
+    Employee deleteAnEmployee(String firstName, String lastName);
 
-    public Employee findAnEmployee(String firstName, String lastName);
+    Employee findAnEmployee(String firstName, String lastName);
 
-    public List<Employee> employeesList();
+    List<Employee> employeesList();
 
 
 }
