@@ -7,26 +7,28 @@ import homework.course.work.Exeption.EmployeeNotFoundException;
 import homework.course.work.Exeption.EmployeeStorageIsFullException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final List<Employee> employees = new ArrayList<>(10);
+    private final Map<String, Employee> employees = new HashMap(10);
+
+    private String getKey(Employee employee) {
+        return employee.getFirstName() + " " + employee.getLastName();
+    }
 
 
     @Override
     public Employee addAnEmployee(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (employees.contains(employee)) {
+        if (employees.containsKey(getKey(employee))) {
             throw new EmployeeAlreadyAddedException();
 
         }
         if (employees.size() < 10) {
-            employees.add(employee);
-            return employee;
+            return employees.put(getKey(employee), employee);
         }
         throw new EmployeeStorageIsFullException();
 
@@ -37,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee deleteAnEmployee(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (!employees.contains(employee)) {
+        if (!employees.containsKey(getKey(employee))) {
             throw new EmployeeNotFoundException();
 
         }
@@ -55,18 +57,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findAnEmployee(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (!employees.contains(employee)) {
+        if (!employees.containsKey(getKey(employee))) {
             throw new EmployeeNotFoundException();
 
         }
-        employees.remove(employee);
+        employees.remove(getKey(employee));
         return employee;
 
     }
 
     @Override
     public List<Employee> employeesList() {
-        return new ArrayList<>(employees);
+        return new ArrayList<>(employees.values());
     }
 
 
