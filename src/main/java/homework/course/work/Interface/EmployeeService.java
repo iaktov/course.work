@@ -7,11 +7,8 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    Employee addAnEmployee(String firstName, String lastName);
+    Employee addAnEmployee(String firstName, String lastName, int salary, int department);
 
-    Employee deleteAnEmployee(String firstName, String lastName);
-
-    Employee findAnEmployee(String firstName, String lastName);
 
     List<Employee> employeesList();
 
