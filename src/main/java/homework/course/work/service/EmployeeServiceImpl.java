@@ -45,7 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         }
         if (employees.size() < 10) {
-            return employees.put(getKey(employee), employee);
+            employees.put(getKey(employee), employee);
+            return employee;
         }
         throw new EmployeeStorageIsFullException();
 
