@@ -31,7 +31,7 @@ public class EmployeeServiceTest {
     }
 
     @ParameterizedTest
-    @MethodSource("paramsForAdd")
+    @MethodSource("paramsForAddWithLowerCase")
     public void employeeStorageIsFullTest(String firstName, String lastName, int salary, int department) {
         List<Employee> employees = generateEmployees(10);
         employees.forEach(employee ->
@@ -46,11 +46,45 @@ public class EmployeeServiceTest {
                 );
     }
 
+
+    @ParameterizedTest
+    @MethodSource("paramsForAdd")
+    public void employeeGetAllTest() {
+        List<Employee> employees = generateEmployees(1);
+        employees.forEach(employee ->
+                assertThat(actual.addAnEmployee(employee.getFirstName(),
+                        employee.getLastName(),
+                        employee.getSalary(),
+                        employee.getDepartment())).isEqualTo(employee)
+        );
+
+
+        assertThat(actual.employeesList()).isEqualTo(employees);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("paramsWithNull")
+    public void employeeWithoutNameTest(String firstName, String lastName, int salary, int department) {
+        List<Employee> employees = generateEmployees(10);
+        employees.forEach(employee ->
+                assertThat(actual.addAnEmployee(employee.getFirstName(),
+                        employee.getLastName(),
+                        employee.getSalary(),
+                        employee.getDepartment())).isEqualTo(employee)
+        );
+
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> actual.addAnEmployee(firstName, lastName, salary, department)
+                );
+    }
+
+
     private List<Employee> generateEmployees(int size) {
         return Stream.iterate(1, i -> i + 1)
                 .limit(size)
-                .map(i -> new Employee("First Name " + (char) ((int) 'a' + i),
-                        "Last Name" + (char) ((int) 'a' + i),
+                .map(i -> new Employee("FirstName" + (char) ((int) 'a' + i),
+                        "LastName" + (char) ((int) 'a' + i),
                         25_693 + i,
                         i))
                 .collect(Collectors.toList());
@@ -60,7 +94,26 @@ public class EmployeeServiceTest {
         return Stream.of(
                 Arguments.of("Ivan", "Ivanov", 24_000, 3),
                 Arguments.of("Jack", "Jackson", 25_000, 1),
-                Arguments.of("Mary", "Allen", 36_000, 2)
+                Arguments.of("Marry", "Allen", 36_000, 2)
         );
     }
+
+    public static Stream<Arguments> paramsForAddWithLowerCase() {
+        return Stream.of(
+                Arguments.of("ivan", "Ivanov", 24_000, 3),
+                Arguments.of("Jack", "jackson", 25_000, 1),
+                Arguments.of("mary", "Allen", 36_000, 2)
+        );
+
+    }
+
+    public static Stream<Arguments> paramsWithNull() {
+        return Stream.of(
+                Arguments.of(null, null, 24_000, 3),
+                Arguments.of(null, null, 25_000, 1),
+                Arguments.of(null, null, 36_000, 2)
+        );
+    }
+
 }
+

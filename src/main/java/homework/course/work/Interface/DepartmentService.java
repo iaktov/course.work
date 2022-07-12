@@ -10,7 +10,7 @@ public interface DepartmentService {
 
     Employee minSalary(int department);
 
-    List<String> employeesInDepartment(Integer department);
+    List<Employee> employeesInDepartment(Integer department);
 
     Map<Object, List<Employee>> employeesByDepartment();
 

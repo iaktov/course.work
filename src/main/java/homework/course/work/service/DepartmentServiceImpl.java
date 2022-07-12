@@ -1,5 +1,6 @@
 package homework.course.work.service;
 
+import homework.course.work.Exeption.EmployeeNotFoundException;
 import homework.course.work.Interface.DepartmentService;
 import homework.course.work.model.Employee;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return employeeList.stream()
                 .filter(employee -> employee.getDepartment() == department)
                 .max(Comparator.comparingInt(e -> e.getSalary()))
-                .orElseThrow();
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Override
@@ -36,15 +37,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         return employeeList.stream()
                 .filter(employee -> employee.getDepartment() == department)
                 .min(Comparator.comparingInt(e -> e.getSalary()))
-                .orElseThrow();
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Override
-    public List<String> employeesInDepartment(Integer department) {
-        final List<Employee> employeeList = employeeService.employeesList();
-        return employeeList.stream()
+    public List<Employee> employeesInDepartment(Integer department) {
+        return employeeService.employeesList().stream()
                 .filter(employee -> employee.getDepartment() == department)
-                .map(e -> e.getFirstName() + "_" + e.getLastName() + "_" + e.getSalary() + "_" + e.getDepartment())
                 .collect(Collectors.toList());
 
     }
@@ -53,8 +52,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Map<Object, List<Employee>> employeesByDepartment() {
         final List<Employee> employeeList = employeeService.employeesList();
         return employeeList.stream()
-                .collect(Collectors.groupingBy(employee -> employee.getDepartment(),
-                        Collectors.toList()));
+                .collect(Collectors.groupingBy(Employee::getDepartment));
 
     }
 }

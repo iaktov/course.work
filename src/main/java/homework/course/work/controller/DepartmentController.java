@@ -33,7 +33,7 @@ public class DepartmentController {
 
 
     @GetMapping(path = "/all", params = "department")
-    public List<String> employeesInDepartment(@RequestParam(value = "departmentId", required = false) Integer department) {
+    public List<Employee> employeesInDepartment(@RequestParam(value = "departmentId", required = false) Integer department) {
         return departmentService.employeesInDepartment(department);
     }
 
